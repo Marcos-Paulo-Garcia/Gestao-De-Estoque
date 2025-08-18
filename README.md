@@ -1,3 +1,5 @@
+GitHub do professor: https://github.com/carlosrmfernandes/gest-stock/tree/main?authuser=0
+
 # 📦 Gestão de Estoque para Mini Mercados
 
 ## 📌 Objetivo
