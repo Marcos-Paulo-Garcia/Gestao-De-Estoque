@@ -12,11 +12,11 @@ def init_routes(app):
     def register_user():
         return UserController.register_user()
     
-    #PRECISA CRIAR O "CORPO" DESSAS ROTAS
+    
     @app.route('/user/:id', methods=['PUT'])
     def update_user():  
         return
     
-    @@app.route('/user/:id', methods= ['GET'] )
+    @app.route('/user/:id', methods= ['GET'] )
     def get_user():
         return
