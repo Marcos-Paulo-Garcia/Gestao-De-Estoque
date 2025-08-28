@@ -7,6 +7,10 @@ def init_routes(app):
         return make_response(jsonify({
             "mensagem": "API - OK; Docker - Up"
         }), 200)
+
+    @app.route('/user/:id', methods= ['GET'] )
+    def get_user():
+        return
     
     @app.route('/user', methods=['POST'])
     def register_user():
@@ -16,7 +20,7 @@ def init_routes(app):
     @app.route('/user/:id', methods=['PUT'])
     def update_user():  
         return
-    
-    @app.route('/user/:id', methods= ['GET'] )
-    def get_user():
+
+    @app.route('/user/:id', methods= ['DELETE'] )
+    def delete_user():
         return

@@ -22,16 +22,9 @@ class UserController:
             "usuarios": user.to_dict()
         }), 200)
 
-
-
-
     def get_user(idUser):
         user = db.session.get(UserController, idUser)
         return user.to_dict() if user else {"erro": "Usuário não encontrado"}
-
-
-
-
 
     def update_user(idUser, new_data):
         user = db.session.get (UserController, idUser)
@@ -51,3 +44,12 @@ class UserController:
         db.session.commit()
 
         return {"mensagem": "Usuário atualizado!"}
+
+     @staticmethod
+    def delete_user(idUser):
+        user = db.session.get(UserController, idUser)
+        if not user:
+            return {"erro": "Usuário não encontrado"}, 404
+        db.session.delete(user)
+        db.session.commit()
+        return ({"mensagem": "Usuário deletado!"}), 200
