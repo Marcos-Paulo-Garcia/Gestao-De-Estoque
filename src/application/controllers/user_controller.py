@@ -3,6 +3,7 @@ from src.application.service.user_service import UserService
 from config.data_base import db
 
 
+
 class UserController:
     @staticmethod
     def register_user():
@@ -10,7 +11,7 @@ class UserController:
         name = data.get('name')
         email = data.get('email')
         password = data.get('password')
-        cnpj = data.get('CNPJ')
+        cnpj = data.get('cnpj')
         number = data.get('number')
 
         if not name or not email or not password or not cnpj or not number:
@@ -22,34 +23,47 @@ class UserController:
             "usuarios": user.to_dict()
         }), 200)
 
+    @staticmethod
     def get_user(idUser):
-        user = db.session.get(UserController, idUser)
-        return user.to_dict() if user else {"erro": "Usuário não encontrado"}
+        user = UserService.get_user(idUser)
+        if not user:
+            return {"erro": "Usuário não encontrado"}, 404
+        return make_response(jsonify({
+            "usuario": user.to_dict()
+        }), 200)
 
-    def update_user(idUser, new_data):
-        user = db.session.get (UserController, idUser)
+    @staticmethod
+    def update_user(idUser):
+        new_data = request.get_json()
+        user = UserService.update_user(idUser, new_data)
         if not user:
             return{"erro": "Usuário não encontrado"}, 404
         
-        required_fields = ['name', 'email', 'password', 'cnpj', 'number']
-        if not all(fields in new_data and new_data[fields] not in [None, ""] for fields in required_fields):
-            return {"erro": "Todos os campos são obrigatórios!"}, 400
+        if user == "missing_fields":
+            return {"erro": "Dados faltantes"}, 400
 
-        user.name = new_data["name"]
-        user.email = new_data["email"]
-        user.password = new_data["password"]
-        user.cnpj = new_data["cnpj"]
-        user.number = new_data["number"]
+        return make_response(jsonify({
+            "mensagem": "User atualizado comsucesso",
+            "usuarios": user.to_dict()
+        }), 200)
 
-        db.session.commit()
-
-        return {"mensagem": "Usuário atualizado!"}
-
-     @staticmethod
+    @staticmethod
     def delete_user(idUser):
-        user = db.session.get(UserController, idUser)
+        user = UserService.delete_user(idUser)
         if not user:
             return {"erro": "Usuário não encontrado"}, 404
-        db.session.delete(user)
-        db.session.commit()
-        return ({"mensagem": "Usuário deletado!"}), 200
+        return {"mensagem": "Usuário deletado!"}, 200
+
+  # --- MÉTODOS FALTANTES ---
+
+    @staticmethod
+    def activate_user():
+        # Endpoint para o usuário enviar o código de ativação
+        # Deverá receber o e-mail/id do usuário e o código
+        pass
+
+    @staticmethod
+    def login():
+        # Endpoint para autenticação do usuário (gerar token JWT)
+        # Deverá verificar se o usuário está ativo
+        pass

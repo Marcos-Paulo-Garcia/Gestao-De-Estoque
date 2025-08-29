@@ -10,7 +10,7 @@ def init_routes(app):
 
     @app.route('/user/:id', methods= ['GET'] )
     def get_user():
-        return
+        return UserController.get_user()
     
     @app.route('/user', methods=['POST'])
     def register_user():
@@ -19,8 +19,9 @@ def init_routes(app):
     
     @app.route('/user/:id', methods=['PUT'])
     def update_user():  
-        return
+        return UserController.update_user()
+    
 
     @app.route('/user/:id', methods= ['DELETE'] )
     def delete_user():
-        return
+        return UserController.delete_user()
