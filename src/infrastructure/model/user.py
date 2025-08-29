@@ -19,3 +19,4 @@ class User(db.Model):
             "number": self.number,
             "status": self.status
         }
+
