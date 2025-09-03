@@ -1,6 +1,6 @@
 from flask import request, jsonify, make_response
 from src.application.service.user_service import UserService
-from config.data_base import db
+from src.config.data_base import db
 
 
 
