@@ -1,25 +1,29 @@
-version: '3'
 services:
-  mysql57:
-    image: mysql:8.0.29
-    restart: unless-stopped
-    container_name: db
-    ports:
-      - "127.0.0.1:3306:3306"
-    environment:
-      MYSQL_ROOT_USER: root
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: market_management
-    volumes:
-      - .db:/var/lib/mysql
   web:
-    build:
-      context: . 
-      dockerfile: Dockerfile
+    build: .
+    container_name: gestao-de-estoque-web
     ports:
       - "5000:5000"
     volumes:
       - .:/src
     environment:
-      FLASK_APP: run.py
-      FLASK_ENV: development
+      - FLASK_ENV=development
+      - FLASK_APP=run.py
+      - DATABASE_URL=mysql+mysqlconnector://root:root@db:3306/market_management
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: db
+    restart: always
+    environment:
+      MYSQL_DATABASE: market_management
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
