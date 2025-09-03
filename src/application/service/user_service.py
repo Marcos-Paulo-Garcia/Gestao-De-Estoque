@@ -7,7 +7,8 @@ class UserService:
     @staticmethod
     def create_user(name, email, password, cnpj, number):
         new_user = UserDomain(name, email, password, cnpj, number)
-        code = WhatsApp.sendMenssage()
+        Whats=WhatsApp()
+        code=Whats.send_code(to_number='whatsapp:+5511985478886')
         user = User(name=new_user.name, email=new_user.email, password=new_user.password, cnpj=new_user.cnpj, number=new_user.number, code = code)
         db.session.add(user)
         db.session.commit()
