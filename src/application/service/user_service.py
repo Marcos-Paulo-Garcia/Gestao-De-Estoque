@@ -1,7 +1,7 @@
-from src.domain.user import UserDomain
 from src.infrastructure.model.user_model import User
 from src.config.data_base import db
 from src.infrastructure.http.whats_app import WhatsApp
+
 
 class UserService:
     @staticmethod
