@@ -1,4 +1,12 @@
+<<<<<<< Updated upstream
 from flask_sqlalchemy import SQLAlchemy 
+=======
+from flask_sqlalchemy import SQLAlchemy
+import os
+from flask_bcrypt import Bcrypt
+
+brypt = Bcrypt()
+>>>>>>> Stashed changes
 
 db = SQLAlchemy()
 
