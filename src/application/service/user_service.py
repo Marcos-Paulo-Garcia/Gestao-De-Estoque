@@ -3,11 +3,6 @@ from src.infrastructure.model.user_model import User
 from src.config.data_base import db , bcrypt
 from src.infrastructure.http.whats_app import WhatsApp
 
-<<<<<<< Updated upstream
-=======
-
-
->>>>>>> Stashed changes
 class UserService:
     @staticmethod
     def create_user(name, email, password, cnpj, number):
@@ -41,7 +36,7 @@ class UserService:
         
         user.name = new_data["name"]
         user.email = new_data["email"]
-        user.password = bcrypt.generate_passsword_hash(new_data["password"]).decode("utf-8")
+        user.password = bcrypt.generate_password_hash(new_data["password"]).decode("utf-8")
         user.cnpj = new_data["cnpj"]
         user.number = new_data["number"]
 
@@ -67,7 +62,7 @@ class UserService:
 
         user.status = "active"
         db.session.commit()
-        return user , None    
+        return user , None  
 
     @staticmethod
     def autenticacao(email, password):
@@ -78,7 +73,7 @@ class UserService:
         if not bcrypt.check_password_hash(user.password, password):
             return None
         
-        if user.statu != "active"
+        if user.status != "active":
             return None
             
         return user

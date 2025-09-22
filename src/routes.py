@@ -8,34 +8,22 @@ def init_routes(app):
             "mensagem": "API - OK; Docker - Up"
         }), 200)
 
-    @app.route('/user/:id', methods= ['GET'] )
-    def get_user():
-        return UserController.get_user()
+    @app.route('/user/<int:id>', methods= ['GET'] )
+    def get_user(id):
+        return UserController.get_user(id)
     
     @app.route('/user', methods=['POST'])
     def register_user():
         return UserController.register_user()
     
-<<<<<<< Updated upstream
-    
-    @app.route('/user/:id', methods=['PUT'])
-    def update_user():  
-        return UserController.update_user()
-=======
     @app.route('/user/<int:id>', methods=['PUT'])
     def update_user(id):  
         return UserController.update_user(id)
->>>>>>> Stashed changes
     
     @app.route('/user/<int:id>/inativar', methods= ['PUT'] )
     def inativar_user(id):
         return UserController.inativar_user(id)
 
-<<<<<<< Updated upstream
-    @app.route('/user/:id', methods= ['DELETE'] )
-    def delete_user():
-        return UserController.delete_user()
-=======
     @app.route('/user/ativar', methods=['POST'])
     def ativar_user():
         return UserController.ativar_user()
@@ -43,4 +31,3 @@ def init_routes(app):
     @app.route('/login', methods= ['POST'])
     def login():
         return UserController.login()
->>>>>>> Stashed changes
