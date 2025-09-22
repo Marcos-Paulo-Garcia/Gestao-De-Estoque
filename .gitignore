@@ -1,1 +1,30 @@
-.env 
+# Arquivos de Bytecode e Cache do Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Pastas de ambiente virtual
+venv/
+env/
+ENV/
+
+# Arquivos de distribuição/pacotes
+*.egg-info/
+dist/
+build/
+
+# Arquivos de configuração de IDEs
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Arquivos de sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos de ambiente e segredos
+.env
