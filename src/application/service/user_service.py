@@ -24,24 +24,26 @@ class UserService:
         if not user:
             return None
         return user
+
+    
     @staticmethod
     def update_user(idUser, new_data):
         user = User.query.get(idUser)
         if not user:
             return None
-        
-        required_fields = ['name', 'email', 'password', 'cnpj', 'number']
-        if not all(field in new_data and new_data[field] not in [None, ""] for field in required_fields):
-            return "missing_fields"
-        
-        user.name = new_data["name"]
-        user.email = new_data["email"]
-        user.password = bcrypt.generate_password_hash(new_data["password"]).decode("utf-8")
-        user.cnpj = new_data["cnpj"]
-        user.number = new_data["number"]
+
+        allowed_fields = ['name', 'email', 'password', 'cnpj', 'number']
+
+        for field in allowed_fields:
+            if field in new_data and new_data[field] not in [None, ""]:
+                if field == "password":
+                    setattr(user, field, bcrypt.generate_password_hash(new_data[field]).decode("utf-8"))
+                else:
+                    setattr(user, field, new_data[field])
 
         db.session.commit()
         return user
+    
     @staticmethod
     def inativar_user(user_id):
         user = User.query.get(user_id)

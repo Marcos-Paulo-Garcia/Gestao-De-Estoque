@@ -1,19 +1,29 @@
 import os
 import random
+from pathlib import Path
 from dotenv import load_dotenv
 from twilio.rest import Client
 
-# Carregar variáveis do .env
-load_dotenv()
+# --- Localizar o .env na raiz do projeto ---
+# __file__ = caminho do script atual
+# parents[3] = três níveis acima, que é a raiz do projeto
+env_path = Path(__file__).resolve().parents[3] / ".env"
+load_dotenv(dotenv_path=env_path)
 
-account_sid = os.getenv("TWILIO_ACCOUNT_SID")
-auth_token = os.getenv("TWILIO_AUTH_TOKEN")
-from_number = os.getenv("FROM_NUMBER")
+# --- Pegar credenciais do Twilio ---
+ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
+AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
+FROM_NUMBER = os.getenv("FROM_NUMBER")
+
+# Verificação rápida das credenciais
+if not all([ACCOUNT_SID, AUTH_TOKEN, FROM_NUMBER]):
+    raise ValueError(f"As credenciais do Twilio não foram encontradas no .env! "
+                     f"Checado em: {env_path}")
 
 class WhatsApp:
     def __init__(self):
-        self.client = Client(account_sid, auth_token)
-        self.from_number = from_number
+        self.client = Client(ACCOUNT_SID, AUTH_TOKEN)
+        self.from_number = FROM_NUMBER
 
     def send_message(self, to_number, text):
         message = self.client.messages.create(
@@ -30,9 +40,9 @@ class WhatsApp:
         self.send_message(to_number, text)
         return code
 
-# --- USO ---
-'''if __name__ == "__main__":
-    to_number = 'whatsapp:+5511985478886'  # Seu número
-    whatsapp = WhatsApp(account_sid, auth_token, from_number)
+# --- Exemplo de uso ---
+if __name__ == "__main__":
+    to_number = 'whatsapp:+5511960691978'  # Coloque seu número aqui
+    whatsapp = WhatsApp()
     codigo = whatsapp.send_code(to_number)
-    print("Código enviado:", codigo)'''
+    print("Código enviado:", codigo)

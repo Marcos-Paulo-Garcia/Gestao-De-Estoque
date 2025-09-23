@@ -1,6 +1,6 @@
 from flask import request, jsonify, make_response
 from src.application.service.user_service import UserService
-from flask_jwt_extended import create_access_token, jwt_required
+from flask_jwt_extended import create_access_token, jwt_required, create_access_token, get_jwt_identity
 
 
 class UserController:
@@ -45,24 +45,39 @@ class UserController:
         except Exception as e:
             return make_response(jsonify({"erro": str(e)}), 500)
 
+
+
     @staticmethod
     @jwt_required()
     def update_user(idUser):
         try:
+            current_user_id = get_jwt_identity()
+
+            if str(current_user_id) != str(idUser):
+                return make_response(jsonify({"erro": "Não autorizado"}), 403)
+
             new_data = request.get_json()
-            user = UserService.update_user(idUser, new_data)
+            if not new_data:
+                return make_response(jsonify({"erro": "Nenhum dado enviado para atualização"}), 400)
+
+        
+            allowed_fields = ["name", "email", "password", "cnpj", "number", "status"]
+            update_fields = {key: value for key, value in new_data.items() if key in allowed_fields}
+
+            if not update_fields:
+                return make_response(jsonify({"erro": "Nenhum campo válido enviado"}), 400)
+
+            user = UserService.update_user(idUser, update_fields)
             if not user:
                 return make_response(jsonify({"erro": "Usuário não encontrado"}), 404)
-            
-            if user == "missing_fields":
-                return make_response(jsonify({"erro": "Dados faltantes"}), 400)
 
             return make_response(jsonify({
-                "mensagem": "User atualizado comsucesso",
+                "mensagem": "User atualizado com sucesso",
                 "usuario": user.to_dict()
             }), 200)
-        
-        except Exception as e: return make_response(jsonify({"erro": str(e)}), 500)
+
+        except Exception as e:
+            return make_response(jsonify({"erro": str(e)}), 500)
 
     @staticmethod
     def inativar_user(idUser):
@@ -108,7 +123,7 @@ class UserController:
             if not user:
                 return make_response(jsonify({"erro": "Credenciais inválidas"}), 401)
 
-            access_token = create_access_token(identity=user.id)
+            access_token = create_access_token(identity=str(user.id))
 
             return jsonify({
                 "access_token": access_token,
