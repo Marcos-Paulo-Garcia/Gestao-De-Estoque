@@ -119,9 +119,9 @@ class UserController:
             email = data.get("email")
             password = data.get("password")
 
-            user = UserService.autenticacao(email, password)
-            if not user:
-                return make_response(jsonify({"erro": "Credenciais inválidas"}), 401)
+            user, erro = UserService.autenticacao(email, password)
+            if erro:
+                return make_response(jsonify({"erro": erro}), 401)
 
             access_token = create_access_token(identity=str(user.id))
 
@@ -132,3 +132,4 @@ class UserController:
 
         except Exception as e:
             return make_response(jsonify({"erro": str(e)}), 500)
+

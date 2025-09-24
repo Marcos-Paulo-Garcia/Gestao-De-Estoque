@@ -70,12 +70,12 @@ class UserService:
     def autenticacao(email, password):
         user = User.query.filter_by(email=email).first()
         if not user:
-            return None
-        
+            return None, "Usuário não encontrado"
+
         if not bcrypt.check_password_hash(user.password, password):
-            return None
-        
+            return None, "Senha incorreta"
+
         if user.status != "active":
-            return None
-            
-        return user
+            return None, "Usuário ainda não ativado"
+
+        return user, None
