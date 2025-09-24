@@ -4,6 +4,9 @@ from src.config.data_base import init_db, bcrypt, db
 from src.routes import init_routes
 from flask_jwt_extended import JWTManager
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def create_app():
     app = Flask(__name__)
