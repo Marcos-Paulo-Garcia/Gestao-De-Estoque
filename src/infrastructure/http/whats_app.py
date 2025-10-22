@@ -1,27 +1,14 @@
 import os
 import random
-from pathlib import Path
-from dotenv import load_dotenv
 from twilio.rest import Client
 
-
-env_path = Path(__file__).resolve().parents[3] / ".env"
-load_dotenv(dotenv_path=env_path)
-
-
-ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
-AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
-FROM_NUMBER = os.getenv("FROM_NUMBER")
-
-
-if not all([ACCOUNT_SID, AUTH_TOKEN, FROM_NUMBER]):
-    raise ValueError(f"As credenciais do Twilio não foram encontradas no .env! "
-                     f"Checado em: {env_path}")
-
 class WhatsApp:
-    def __init__(self):
-        self.client = Client(ACCOUNT_SID, AUTH_TOKEN)
-        self.from_number = FROM_NUMBER
+    def __init__(self, account_sid, auth_token, from_number):
+        if not all([account_sid, auth_token, from_number]):
+            raise ValueError("As credenciais do Twilio (account_sid, auth_token, from_number) são necessárias.")
+        
+        self.client = Client(account_sid, auth_token)
+        self.from_number = from_number
 
     def send_message(self, to_number, text):
         message = self.client.messages.create(
@@ -38,9 +25,15 @@ class WhatsApp:
         self.send_message(to_number, text)
         return code
 
-
 if __name__ == "__main__":
-    to_number = 'whatsapp:+5511960691978'  
-    whatsapp = WhatsApp()
+    # Para teste local, carregue as variáveis aqui
+    from dotenv import load_dotenv
+    load_dotenv()
+    
+    test_sid = os.getenv("TWILIO_ACCOUNT_SID")
+    test_token = os.getenv("TWILIO_AUTH_TOKEN")
+    test_from = os.getenv("FROM_NUMBER")
+    to_number = 'whatsapp:+5511999999999' # Substitua pelo seu número de teste
+    whatsapp = WhatsApp(test_sid, test_token, test_from)
     codigo = whatsapp.send_code(to_number)
     print("Código enviado:", codigo)

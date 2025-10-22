@@ -2,6 +2,7 @@ from src.domain.user import UserDomain
 from src.infrastructure.model.user_model import User
 from src.config.data_base import db , bcrypt
 from src.infrastructure.http.whats_app import WhatsApp
+import os
 
 class UserService:
     @staticmethod
@@ -10,8 +11,17 @@ class UserService:
         hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
 
         new_user = UserDomain(name, email, hashed_password, cnpj, number)
-        Whats=WhatsApp()
-        code=Whats.send_code(to_number='whatsapp:+5511985478886')
+        
+        # Formata o número para o padrão do WhatsApp/Twilio
+        whatsapp_number = f"whatsapp:{number}"
+
+        # Carrega as credenciais do ambiente e instancia o serviço
+        account_sid = os.getenv("TWILIO_ACCOUNT_SID")
+        auth_token = os.getenv("TWILIO_AUTH_TOKEN")
+        from_number = os.getenv("FROM_NUMBER")
+
+        whats_app_service = WhatsApp(account_sid, auth_token, from_number)
+        code = whats_app_service.send_code(to_number=whatsapp_number)
 
         user = User(name=new_user.name, email=new_user.email, password=new_user.password, cnpj=new_user.cnpj, number=new_user.number, code = code)
         db.session.add(user)

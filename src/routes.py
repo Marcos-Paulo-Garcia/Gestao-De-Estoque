@@ -1,4 +1,6 @@
 from src.application.controllers.user_controller import UserController
+from src.application.controllers.product_controller import ProductController
+from src.application.controllers.sale_controller import SaleController
 from flask import jsonify, make_response
 
 def init_routes(app):
@@ -31,3 +33,31 @@ def init_routes(app):
     @app.route('/login', methods= ['POST'])
     def login():
         return UserController.login()
+    
+    
+    # Products routes
+    @app.route('/product', methods=['POST'])
+    def register_product():
+        return ProductController.register_product()
+    
+    @app.route('/product', methods=['GET'])
+    def get_products():
+        return ProductController.get_products()
+    
+    @app.route('/product/<int:id>', methods=['GET'])
+    def get_product_id(id):
+        return ProductController.get_product_id(id)
+    
+    @app.route('/product/<int:id>', methods=['PUT'])
+    def update_product(id):
+        return ProductController.update_product(id)
+    
+    @app.route('/product/<int:id>/inativar', methods=['PUT'])
+    def inativar_product(id):
+        return ProductController.inativar_product(id)
+
+    # Sales routes
+    # A especificação usa /api/sales, mas para manter o padrão do seu projeto, usei /sale
+    @app.route('/sale', methods=['POST'])
+    def create_sale():
+        return SaleController.create_sale()

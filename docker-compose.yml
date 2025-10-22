@@ -8,8 +8,11 @@ services:
       - .:/src
     environment:
       - FLASK_ENV=development
-      - FLASK_APP=run.py
-      - DATABASE_URL=mysql+mysqlconnector://root:root@db:3306/market_management
+      - DATABASE_URL=${DATABASE_URL_DOCKER}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
+      - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
+      - FROM_NUMBER=${FROM_NUMBER}
     depends_on:
       - db
 
@@ -18,8 +21,8 @@ services:
     container_name: db
     restart: always
     environment:
-      MYSQL_DATABASE: market_management
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
