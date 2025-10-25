@@ -61,3 +61,7 @@ def init_routes(app):
     @app.route('/sale', methods=['POST'])
     def create_sale():
         return SaleController.create_sale()
+    
+    @app.route('/sale', methods=['GET'])
+    def get_sales():
+        return SaleController.get_sales()
