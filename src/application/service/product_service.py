@@ -30,7 +30,6 @@ class ProductService:
     if not product:
         return None
 
-    # Campos que podem ser atualizados
     allowed_fields = ['name', 'price', 'quantity', 'status', 'image_url']
     
     for field, value in new_data.items():

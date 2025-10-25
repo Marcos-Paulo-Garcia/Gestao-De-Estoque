@@ -12,7 +12,6 @@ class UserService:
 
         new_user = UserDomain(name, email, hashed_password, cnpj, number)
         
-        # Formata o número para o padrão do WhatsApp/Twilio
         whatsapp_number = f"whatsapp:{number}"
 
         # Carrega as credenciais do ambiente e instancia o serviço

@@ -5,10 +5,8 @@ from flask import Flask
 from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
 
-# Carrega as variáveis de ambiente ANTES de qualquer outra importação do projeto
 load_dotenv()
 
-# Adiciona a raiz do projeto ao sys.path para resolver os imports
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 from src.config.data_base import init_db, bcrypt, db, SQLAlchemy
 from src.routes import init_routes

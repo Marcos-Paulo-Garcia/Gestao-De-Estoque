@@ -11,17 +11,14 @@ class SaleController:
             if not data:
                 return make_response(jsonify({"erro": "Dados JSON necessários"}), 400)
 
-            # 1. Coletar os dados do corpo da requisição
             product_id = data.get('produtoId')
             quantity = data.get('quantidade')
             
-            # 2. Obter o ID do vendedor (usuário) a partir do token
             seller_id = get_jwt_identity()
 
             if not product_id or not quantity:
                 return make_response(jsonify({"erro": "Os campos 'produtoId' e 'quantidade' são obrigatórios"}), 400)
 
-            # 3. Chamar o serviço com os dados coletados
             sale, error, status_code = SaleService.register_sale(product_id, quantity, int(seller_id))
 
             if error:

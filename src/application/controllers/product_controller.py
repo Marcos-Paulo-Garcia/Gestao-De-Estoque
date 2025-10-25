@@ -15,7 +15,7 @@ class ProductController:
       name = data.get('name')
       price = data.get('price')
       quantity = data.get('quantity')
-      status = data.get('status', 'active') # Define 'active' como padrão se não for fornecido
+      status = data.get('status', 'active')
       image_url = data.get('image_url')
       
       # Obtém o ID do vendedor a partir do token JWT

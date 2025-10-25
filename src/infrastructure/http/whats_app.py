@@ -26,7 +26,7 @@ class WhatsApp:
         return code
 
 if __name__ == "__main__":
-    # Para teste local, carregue as variáveis aqui
+    # Para teste local, carregar as variáveis aqui
     from dotenv import load_dotenv
     load_dotenv()
     
