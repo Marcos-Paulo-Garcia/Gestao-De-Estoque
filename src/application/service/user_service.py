@@ -63,8 +63,8 @@ class UserService:
         return user
 
     @staticmethod
-    def ativar_user(email,code):
-        user = User.query.filter_by(email=email).first()
+    def ativar_user(number,code):
+        user = User.query.filter_by(number=number).first()
         if not user:
             return None, "Usuário não encontrado"
 

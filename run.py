@@ -4,18 +4,22 @@ from datetime import timedelta
 from flask import Flask
 from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
+from flask_cors import CORS
 
 load_dotenv()
 
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
+
 from src.config.data_base import init_db, bcrypt, db, SQLAlchemy
 from src.routes import init_routes
+
 
 def create_app():
     app = Flask(__name__)
 
-    app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "super-secret-key-default")
+    CORS(app)
 
+    app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "super-secret-key-default")
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=24)
 
     jwt = JWTManager(app)
@@ -25,6 +29,7 @@ def create_app():
     init_routes(app)
 
     return app
+
 
 app = create_app()
 

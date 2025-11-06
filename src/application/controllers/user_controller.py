@@ -80,8 +80,15 @@ class UserController:
             return make_response(jsonify({"erro": str(e)}), 500)
 
     @staticmethod
+    @jwt_required()
     def inativar_user(idUser):
         try:
+            current_user_id = get_jwt_identity()
+
+            # Garante que um usuário só pode inativar a si mesmo
+            if str(current_user_id) != str(idUser):
+                return make_response(jsonify({"erro": "Não autorizado"}), 403)
+
             user = UserService.inativar_user(idUser)
             if not user:
                 return make_response(jsonify({"erro": "Usuário não encontrado"}), 404)
@@ -96,10 +103,10 @@ class UserController:
     def ativar_user():
         try:
             data = request.get_json()
-            email = data.get("email")
+            number = data.get("number")
             code = data.get("code")
 
-            user, erro = UserService.ativar_user(email,code)
+            user, erro = UserService.ativar_user(number,code)
             if erro:
                 return make_response(jsonify({"erro": erro}), 400)
 
