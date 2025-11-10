@@ -7,10 +7,21 @@ class ProductService:
   def create_product(name, price, quantity, status, image_url, seller_id):
     new_product = ProductDomain(name, price, quantity, status, image_url, seller_id)
     
-    product = Product(name=new_product.name, price=new_product.price, quantity=new_product.quantity, status=new_product.status, image_url=new_product.image_url, seller_id=new_product.seller.seller_id)
+    product = Product(
+        name=new_product.name,
+        price=new_product.price,
+        quantity=new_product.quantity,
+        status=new_product.status,
+        image_url=new_product.image_url,
+        seller_id=new_product.seller_id
+    )
+
     db.session.add(product)
     db.session.commit()
+    db.session.refresh(product)  # garante que o ID recém-criado seja carregado
+
     return product
+
          
   @staticmethod
   def get_products(seller_id):

@@ -8,7 +8,7 @@ db = SQLAlchemy()
 def init_db(app):
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
         'DATABASE_URL',
-        'mysql+pymysql://root:1234@localhost:3306/market_management'
+        'mysql+pymysql://root:alitheju123@localhost:3306/market_management'
     )
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)

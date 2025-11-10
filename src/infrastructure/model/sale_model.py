@@ -11,14 +11,15 @@ class Sale(db.Model):
     price_at_sale = db.Column(db.Float, nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
 
+    # Relacionamentos
     product = db.relationship('Product')
-    seller = db.relationship('User')
+    user = db.relationship('User')
 
     def to_dict(self):
         return {
             'id': self.id,
             'product_id': self.product_id,
-            'seller_id': self.seller_id,
+            'user_id': self.user_id,
             'quantity': self.quantity,
             'price_at_sale': self.price_at_sale,
             'created_at': self.created_at.isoformat()
