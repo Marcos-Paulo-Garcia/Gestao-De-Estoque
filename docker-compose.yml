@@ -1,0 +1,32 @@
+services:
+  web:
+    build: .
+    container_name: gestao-de-estoque-web
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/src
+    environment:
+      - FLASK_ENV=development
+      - DATABASE_URL=${DATABASE_URL_DOCKER}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
+      - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
+      - FROM_NUMBER=${FROM_NUMBER}
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: db
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
