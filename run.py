@@ -6,6 +6,7 @@ from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
 from flask_cors import CORS
 
+
 load_dotenv()
 
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
