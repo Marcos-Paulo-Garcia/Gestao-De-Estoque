@@ -10,13 +10,12 @@ load_dotenv()
 
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
-from src.config.data_base import init_db, bcrypt, db, SQLAlchemy
+from src.config.data_base import init_db, bcrypt, db
 from src.routes import init_routes
 
 
 def create_app():
     app = Flask(__name__)
-
     CORS(app)
 
     app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "super-secret-key-default")
@@ -38,7 +37,7 @@ def init_db_command():
     """Cria as tabelas do banco de dados."""
     with app.app_context():
         db.create_all()
-    print("Banco de dados inicializado e tabelas criadas.")
+    print("✅ Banco de dados inicializado e tabelas criadas.")
 
 
 if __name__ == "__main__":
