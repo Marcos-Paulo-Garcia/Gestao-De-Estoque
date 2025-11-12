@@ -2,6 +2,13 @@ from src.infrastructure.model.product_model import Product
 from src.infrastructure.model.sale_model import Sale
 from src.infrastructure.model.user_model import User
 from src.config.data_base import db
+from datetime import datetime, timedelta
+
+
+def br_time():
+    """Retorna a data e hora de Brasília (UTC-3)"""
+    return datetime.utcnow() - timedelta(hours=3)
+
 
 class SaleService:
     @staticmethod
@@ -21,13 +28,16 @@ class SaleService:
             if product.quantity < quantity:
                 return None, f"Estoque insuficiente. Quantidade disponível: {product.quantity}", 409
 
+            # Atualiza o estoque
             product.quantity -= quantity
 
+            # Cria a venda com hora de Brasília
             new_sale = Sale(
                 product_id=product_id,
                 user_id=seller_id,
                 quantity=quantity,
-                price_at_sale=product.price
+                price_at_sale=product.price,
+                created_at=br_time()
             )
 
             db.session.add(new_sale)
@@ -41,8 +51,12 @@ class SaleService:
 
     @staticmethod
     def get_sales(seller_id=None):
+        """
+        Retorna todas as vendas com nome do produto, preço e data/hora.
+        """
         try:
             query = db.session.query(Sale, Product).join(Product, Sale.product_id == Product.id)
+
             if seller_id:
                 query = query.filter(Sale.user_id == seller_id)
 
@@ -54,7 +68,7 @@ class SaleService:
                     "product_id": sale.product_id,
                     "product_name": product.name,
                     "price": float(sale.price_at_sale),
-                    "date": sale.created_at.strftime("%Y-%m-%d %H:%M:%S") if sale.created_at else None
+                    "date": sale.created_at.isoformat() if sale.created_at else None
                 })
 
             return sales_data
