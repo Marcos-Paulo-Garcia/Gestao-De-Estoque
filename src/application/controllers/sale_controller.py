@@ -14,7 +14,6 @@ class SaleController:
             product_id = data.get("produtoId")
             quantity = data.get("quantidade")
 
-            # Validação dos campos obrigatórios
             if not product_id or not quantity:
                 return make_response(jsonify({
                     "erro": "Os campos 'produtoId' e 'quantidade' são obrigatórios"
@@ -30,9 +29,7 @@ class SaleController:
 
             seller_id = get_jwt_identity()
 
-            # Chama o service
             sale, error, status_code = SaleService.register_sale(product_id, quantity, seller_id)
-
             if error:
                 return make_response(jsonify({"erro": error}), status_code)
 
@@ -51,14 +48,12 @@ class SaleController:
             seller_id = get_jwt_identity()
             sales = SaleService.get_sales(seller_id)
 
-            if not sales or len(sales) == 0:
+            if not sales:
                 return make_response(jsonify({
                     "mensagem": "Nenhuma venda encontrada para este vendedor."
                 }), 200)
 
-            return make_response(jsonify({
-                "vendas": [sale.to_dict() for sale in sales]
-            }), 200)
+            return make_response(jsonify({"vendas": sales}), 200)
 
         except Exception as e:
             return make_response(jsonify({"erro": f"Erro interno: {str(e)}"}), 500)
