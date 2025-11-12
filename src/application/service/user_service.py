@@ -3,6 +3,7 @@ from src.infrastructure.model.user_model import User
 from src.config.data_base import db , bcrypt
 from src.infrastructure.http.whats_app import WhatsApp
 import os
+import random
 
 class UserService:
     @staticmethod
@@ -15,12 +16,14 @@ class UserService:
         whatsapp_number = f"whatsapp:{number}"
 
         # Carrega as credenciais do ambiente e instancia o serviço
-        account_sid = os.getenv("TWILIO_ACCOUNT_SID")
+        '''account_sid = os.getenv("TWILIO_ACCOUNT_SID")
         auth_token = os.getenv("TWILIO_AUTH_TOKEN")
         from_number = os.getenv("FROM_NUMBER")
 
         whats_app_service = WhatsApp(account_sid, auth_token, from_number)
-        code = whats_app_service.send_code(to_number=whatsapp_number)
+        code = whats_app_service.send_code(to_number=whatsapp_number)'''
+        
+        code = random.randint(1000, 9999)
 
         user = User(name=new_user.name, email=new_user.email, password=new_user.password, cnpj=new_user.cnpj, number=new_user.number, code = code)
         db.session.add(user)
